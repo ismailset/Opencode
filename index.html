@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maya Chen — Junior Web Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #F7F5F0;
+      --text: #1A1A1A;
+      --accent: #E85D04;
+      --secondary: #8B8680;
+      --card-bg: #FFFFFF;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      font-size: 18px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 24px 0;
+      background: rgba(247, 245, 240, 0.9);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+    }
+
+    nav .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--secondary);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      position: relative;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 100px 0;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 72px;
+      font-weight: 500;
+      line-height: 1.1;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 .word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeUp 0.6s ease forwards;
+    }
+
+    .hero h1 .word:nth-child(1) { animation-delay: 0.1s; }
+    .hero h1 .word:nth-child(2) { animation-delay: 0.2s; }
+    .hero h1 .word:nth-child(3) { animation-delay: 0.3s; }
+    .hero h1 .word:nth-child(4) { animation-delay: 0.4s; }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero p {
+      font-size: 20px;
+      color: var(--secondary);
+      max-width: 500px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease 0.6s forwards;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--secondary);
+      font-size: 14px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease 1s forwards;
+    }
+
+    .scroll-indicator span {
+      width: 24px;
+      height: 40px;
+      border: 2px solid var(--secondary);
+      border-radius: 12px;
+      position: relative;
+    }
+
+    .scroll-indicator span::before {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 2px;
+      animation: scrollBounce 1.5s ease infinite;
+    }
+
+    @keyframes scrollBounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+      50% { transform: translateX(-50%) translateY(10px); opacity: 0.5; }
+    }
+
+    /* Sections */
+    section {
+      padding: 100px 0;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 48px;
+      font-weight: 500;
+      margin-bottom: 48px;
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* About */
+    .about-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .about-text p {
+      margin-bottom: 24px;
+      color: var(--secondary);
+    }
+
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .skill-tag {
+      background: var(--card-bg);
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 24px;
+      font-size: 14px;
+      font-weight: 500;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    /* Projects */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    .project-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .project-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+    }
+
+    .project-image {
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+    }
+
+    .project-card:nth-child(1) .project-image {
+      background: linear-gradient(135deg, #FF9A8B 0%, #FF6B6B 100%);
+    }
+
+    .project-card:nth-child(2) .project-image {
+      background: linear-gradient(135deg, #A8E6CF 0%, #88D8B0 100%);
+    }
+
+    .project-card:nth-child(3) .project-image {
+      background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+    }
+
+    .project-info {
+      padding: 24px;
+    }
+
+    .project-info h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .project-info p {
+      color: var(--secondary);
+      font-size: 15px;
+      margin-bottom: 16px;
+    }
+
+    .project-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .project-tags span {
+      font-size: 12px;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* Contact */
+    .contact {
+      text-align: center;
+      background: var(--card-bg);
+      border-radius: 24px;
+      padding: 80px 40px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    }
+
+    .contact p {
+      color: var(--secondary);
+      margin-bottom: 32px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .contact-btn {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      padding: 16px 40px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .contact-btn:hover {
+      background: #D14F00;
+      transform: scale(1.05);
+    }
+
+    /* Footer */
+    footer {
+      padding: 40px 0;
+      text-align: center;
+      color: var(--secondary);
+      font-size: 14px;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .projects-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 42px;
+      }
+
+      .section-title {
+        font-size: 32px;
+      }
+
+      section {
+        padding: 60px 0;
+      }
+
+      .about-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links {
+        gap: 20px;
+      }
+
+      .nav-links a {
+        font-size: 14px;
+      }
+
+      .contact {
+        padding: 60px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <a href="#" class="logo">Maya Chen</a>
+      <ul class="nav-links">
+        <li><a href="#work">Work</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <h1>
+        <span class="word">Creating</span>
+        <span class="word">digital</span>
+        <span class="word">experiences</span>
+        <span class="word">that matter.</span>
+      </h1>
+      <p>I'm a junior web designer passionate about crafting beautiful, user-centered interfaces that bring ideas to life.</p>
+    </div>
+    <div class="scroll-indicator">
+      <span></span>
+      scroll
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="container">
+      <h2 class="section-title fade-in">About Me</h2>
+      <div class="about-content fade-in">
+        <div class="about-text">
+          <p>I'm a recent graduate from the Digital Design program at SCAD, now eager to contribute my creativity and technical skills to innovative projects. I believe great design is about solving problems while bringing joy to users.</p>
+          <p>When I'm not designing, you'll find me exploring art museums, sketching in coffee shops, or experimenting with new design tools. I'm currently seeking entry-level opportunities where I can grow and learn from experienced teams.</p>
+        </div>
+        <div class="skills">
+          <span class="skill-tag">Figma</span>
+          <span class="skill-tag">Adobe XD</span>
+          <span class="skill-tag">HTML/CSS</span>
+          <span class="skill-tag">JavaScript</span>
+          <span class="skill-tag">UI Design</span>
+          <span class="skill-tag">Responsive Design</span>
+          <span class="skill-tag">Prototyping</span>
+          <span class="skill-tag">Typography</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="work">
+    <div class="container">
+      <h2 class="section-title fade-in">Selected Work</h2>
+      <div class="projects-grid">
+        <a href="#" class="project-card fade-in">
+          <div class="project-image">✦</div>
+          <div class="project-info">
+            <h3>Bloom Botanicals</h3>
+            <p>E-commerce website design for a sustainable plant shop with a natural, calming aesthetic.</p>
+            <div class="project-tags">
+              <span>UI Design</span>
+              <span>Figma</span>
+              <span>E-commerce</span>
+            </div>
+          </div>
+        </a>
+        <a href="#" class="project-card fade-in">
+          <div class="project-image">◈</div>
+          <div class="project-info">
+            <h3>Muse Gallery</h3>
+            <p>Modern art gallery website featuring virtual exhibitions and artist spotlights.</p>
+            <div class="project-tags">
+              <span>Web Design</span>
+              <span>UX Research</span>
+              <span>Branding</span>
+            </div>
+          </div>
+        </a>
+        <a href="#" class="project-card fade-in">
+          <div class="project-image">◎</div>
+          <div class="project-info">
+            <h3>Wanderlust Travel</h3>
+            <p>Travel booking platform with immersive imagery and intuitive booking flows.</p>
+            <div class="project-tags">
+              <span>Mobile Design</span>
+              <span>Prototyping</span>
+              <span>User Flow</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container">
+      <div class="contact fade-in">
+        <h2 class="section-title" style="margin-bottom: 16px;">Let's Create Together</h2>
+        <p>I'm currently available for freelance projects and full-time opportunities. Let's discuss how I can contribute to your team.</p>
+        <a href="mailto:hello@mayachen.design" class="contact-btn">Get in Touch</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>© 2026 Maya Chen. Designed with care.</p>
+    </div>
+  </footer>
+
+  <script>
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, index * 100);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
